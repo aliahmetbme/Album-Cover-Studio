@@ -34,11 +34,11 @@ class LastFmService:
                 response.raise_for_status()
                 data = response.json()
                 
-                # JSON içindeki şarkı listesine ulaşalım
+                # get singer in JSON format
                 tracks = data.get("tracks", {}).get("track", [])
 
                 for t in tracks:
-                    # Şarkı adı + Sanatçı adını ID olarak kullanıp kopyaları engelliyoruz
+                    # get song name + singer name and convert to ID to prevent duplicate tracks
                     track_id = f"{t['name']} - {t['artist']['name']}".lower()
                     
                     if track_id not in seen_track_ids:
@@ -46,33 +46,33 @@ class LastFmService:
                         all_tracks.append({
                             "title": t['name'],
                             "artist": t['artist']['name'],
-                            "url": t['url'] # REQ 7: "Listen" butonu için gereken link
+                            "url": t['url'] # REQ 7: "Listen" link
                         })
                         
-                    # İstenen sayıya ulaştıysak döngüden çıkabiliriz
+                    # if reached target count, break the loop
                     if len(all_tracks) >= target_count:
                         break
 
             except Exception as e:
-                print(f"Last.fm hata ({tag}): {e}")
+                print(f"Last.fm error ({tag}): {e}")
             
             if len(all_tracks) >= target_count:
                 break
 
         return all_tracks[:target_count]
 
-# --- MÜZİK SORUMLUSU İÇİN TEST BÖLÜMÜ ---
+# --- FOR TESTING ---
 if __name__ == "__main__":
     service = LastFmService()
-    # Senin az önce Gemini'dan aldığın gerçek etiketleri buraya koyup test ediyoruz
+    # Gemini'dan aldığımız etiketler
     test_tags = ["indie pop", "dream pop", "atmospheric"]
     
-    print(f"'{test_tags}' etiketleri için gerçek şarkılar aranıyor...")
+    print(f"'{test_tags}' real song is seraching...")
     songs = service.fetch_tracks_by_tags(test_tags, 8)
     
     if songs:
-        print(f"\n--- Toplam {len(songs)} Gerçek Şarkı Bulundu ---")
+        print(f"\n--- Total {len(songs)} Real Song Found ---")
         for i, song in enumerate(songs, 1):
             print(f"{i}. {song['title']} - {song['artist']}")
     else:
-        print("Şarkı bulunamadı. API Key'inizi kontrol edin.")
+        print("Song is not found. Please check your API Key.")
