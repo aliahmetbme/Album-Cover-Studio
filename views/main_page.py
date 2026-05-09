@@ -140,8 +140,20 @@ class MainPage(tk.Frame):
         self.style.configure("Left.TLabel", background="#0A0A0A", foreground="#FFFFFF", font=("Helvetica", 12))
         
         # ANA BUTON BÜYÜTÜLDÜ (11 -> 14 ve padding artırıldı)
-        self.style.configure("Green.TButton", background="#1DB954", foreground="#000000", font=("Helvetica", 14, "bold"), padding=14)
-        self.style.map("Green.TButton", background=[('active', '#1ed760')])
+        self.style.configure("Green.TButton", 
+                             background="#1DB954", 
+                             foreground="#000000", 
+                             font=("Helvetica", 14, "bold"), 
+                             padding=14,
+                             borderwidth=0,
+                             focuscolor="#1DB954",
+                             relief="flat")
+        self.style.map("Green.TButton", 
+                       background=[('active', '#1ed760')],
+                       focuscolor=[('active', '#1ed760'), ('!active', '#1DB954')],
+                       lightcolor=[('active', '#1ed760'), ('!active', '#1DB954')],
+                       darkcolor=[('active', '#1ed760'), ('!active', '#1DB954')],
+                       bordercolor=[('active', '#1ed760'), ('!active', '#1DB954')])
         
         self.style.configure("Outline.TButton", background="#181818", foreground="#1DB954", font=("Helvetica", 9, "bold"))
         
@@ -150,19 +162,19 @@ class MainPage(tk.Frame):
                              fieldbackground="#181818", 
                              background="#181818", 
                              foreground="#FFFFFF", 
-                             bordercolor="#181818", 
-                             lightcolor="#181818",
-                             darkcolor="#181818", 
+                             bordercolor="#282828", 
+                             lightcolor="#282828",
+                             darkcolor="#282828", 
                              arrowcolor="#FFFFFF",
-                             borderwidth=0,
+                             borderwidth=1,
                              padding=10)
                              
         self.style.map("TCombobox", 
                        fieldbackground=[('readonly', '#181818'), ('focus', '#181818')],
                        selectbackground=[('readonly', '#1DB954'), ('focus', '#1DB954')],
-                       lightcolor=[('focus', '#181818')],
-                       darkcolor=[('focus', '#181818')],
-                       bordercolor=[('focus', '#181818')])
+                       lightcolor=[('focus', '#282828')],
+                       darkcolor=[('focus', '#282828')],
+                       bordercolor=[('focus', '#1DB954')])
                        
         self.option_add('*TCombobox*Listbox.background', '#181818')
         self.option_add('*TCombobox*Listbox.foreground', '#FFFFFF')
@@ -175,20 +187,22 @@ class MainPage(tk.Frame):
                              fieldbackground="#181818", 
                              background="#181818", 
                              foreground="#FFFFFF", 
-                             bordercolor="#181818", 
-                             lightcolor="#181818", 
-                             darkcolor="#181818", 
+                             bordercolor="#282828", 
+                             lightcolor="#282828", 
+                             darkcolor="#282828", 
                              arrowcolor="#FFFFFF",
-                             borderwidth=0,
+                             borderwidth=1,
+                             highlightthickness=0,
                              insertwidth=0,
-                             padding=10)
+                             padding=10,
+                             relief="flat")
                              
         self.style.map("TSpinbox", 
                        fieldbackground=[('readonly', '#181818'), ('focus', '#181818')],
                        selectbackground=[('readonly', '#1DB954'), ('focus', '#1DB954')],
-                       lightcolor=[('focus', '#181818')],
-                       darkcolor=[('focus', '#181818')],
-                       bordercolor=[('focus', '#181818')])
+                       lightcolor=[('focus', '#282828'), ('active', '#282828'), ('!disabled', '#282828')],
+                       darkcolor=[('focus', '#282828'), ('active', '#282828'), ('!disabled', '#282828')],
+                       bordercolor=[('focus', '#1DB954'), ('active', '#1DB954'), ('!disabled', '#282828')])
 
     def create_layout(self):
         # Left Panel (Expanded to 400px with balancing left padding)
@@ -258,62 +272,32 @@ class MainPage(tk.Frame):
 
         ttk.Label(content, text="Your Mood / Journal Entry", style="Left.TLabel").pack(anchor="w", pady=(10, 5))
         
-        # Rounded Mood Text Area
-        mood_frame = RoundedContainer(content, width=340, height=140, radius=15)
-        mood_frame.pack(pady=(0, 20))
-        self.mood_text = tk.Text(mood_frame, bg="#181818", fg="#FFFFFF", font=("Helvetica", 13), 
-                                 insertbackground="white", relief="flat", highlightthickness=0, bd=0)
-        self.mood_text.place(x=12, y=12, width=316, height=116)
+        # Mood Text Area (Native tk.Text with internal padding)
+        self.mood_text = tk.Text(content, bg="#181818", fg="#FFFFFF", font=("Helvetica", 13), 
+                                 insertbackground="white", relief="flat", highlightthickness=1, 
+                                 highlightbackground="#282828", bd=0, padx=12, pady=12, height=6)
+        self.mood_text.pack(fill="x", pady=(0, 20))
         self.mood_text.insert("1.0", "How was your day?")
         
         ttk.Label(content, text="Genre", style="Left.TLabel").pack(anchor="w", pady=(0, 5))
-        genre_frame = RoundedContainer(content, width=340, height=45, radius=10)
-        genre_frame.pack(pady=(0, 20))
-        self.genre_combo = ttk.Combobox(genre_frame, values=["Pop", "Rock", "Hip-Hop / Rap", "Electronic", "Indie", "R&B / Soul", "Jazz", "Metal", "Türk Pop", "Klasik"], state="readonly", font=("Helvetica", 13))
+        self.genre_combo = ttk.Combobox(content, values=["Pop", "Rock", "Hip-Hop / Rap", "Electronic", "Indie", "R&B / Soul", "Jazz", "Metal", "Turkish Pop", "Classical"], state="readonly", font=("Helvetica", 13))
         self.genre_combo.set("Pop")
-        self.genre_combo.place(x=10, y=2, width=320, height=41)
+        self.genre_combo.pack(fill="x", pady=(0, 20))
         
         ttk.Label(content, text="Era", style="Left.TLabel").pack(anchor="w", pady=(0, 5))
-        era_frame = RoundedContainer(content, width=340, height=45, radius=10)
-        era_frame.pack(pady=(0, 20))
-        self.era_combo = ttk.Combobox(era_frame, values=["2020s", "2010s", "2000s", "1990s", "1980s", "1970s"], state="readonly", font=("Helvetica", 13))
+        self.era_combo = ttk.Combobox(content, values=["1970s", "1980s", "1990s", "2000s", "2010s", "2020s"], state="readonly", font=("Helvetica", 13))
         self.era_combo.set("2020s")
-        self.era_combo.place(x=10, y=2, width=320, height=41)
+        self.era_combo.pack(fill="x", pady=(0, 20))
         
+        # Fix AGP4 (Track Count Spinbox)
         ttk.Label(content, text="Track Count (6-14)", style="Left.TLabel").pack(anchor="w", pady=(0, 5))
-        track_frame = RoundedContainer(content, width=340, height=45, radius=10)
-        track_frame.pack(pady=(0, 35))
-        # Custom Modern Counter (Large buttons with spacing)
-        self.track_val = tk.IntVar(value=10)
+        self.track_spin = ttk.Spinbox(content, from_=6, to=14, state="readonly", font=("Helvetica", 13))
+        self.track_spin.set(10)
+        self.track_spin.pack(fill="x", pady=(0, 35))
         
-        def update_track(delta):
-            new_val = self.track_val.get() + delta
-            if 6 <= new_val <= 14:
-                self.track_val.set(new_val)
-
-        # Value display (Center)
-        val_label = tk.Label(track_frame, textvariable=self.track_val, font=("Helvetica", 16, "bold"), 
-                             bg="#181818", fg="#FFFFFF")
-        val_label.place(x=140, y=7, width=60)
-
-        # Minus Button (Circular and cleaned background)
-        self.btn_minus = RoundedButton(track_frame, text="−", command=lambda: update_track(-1), 
-                                       width=40, height=35, radius=17, bg_color="#282828", fg_color="#FFFFFF")
-        self.btn_minus.configure(bg="#181818") # Remove black corner artifacts
-        self.btn_minus.place(x=10, y=5)
-
-        # Plus Button (Circular and cleaned background)
-        self.btn_plus = RoundedButton(track_frame, text="+", command=lambda: update_track(1), 
-                                      width=40, height=35, radius=17, bg_color="#282828", fg_color="#FFFFFF")
-        self.btn_plus.configure(bg="#181818") # Remove black corner artifacts
-        self.btn_plus.place(x=290, y=5)
-        
-        # --- Custom Rounded Generate Button (Centered & Symmetrical) ---
-        self.generate_btn = RoundedButton(content, text="GENERATE ALBUM", 
-                                          command=self.on_generate_click,
-                                          width=340, height=50, radius=25,
-                                          font=("Helvetica", 14, "bold"))
-        self.generate_btn.pack(pady=(0, 15))
+        # Fix REQ 2 (Use Native ttk.Button)
+        self.generate_btn = ttk.Button(content, text="GENERATE ALBUM", style="Green.TButton", command=self.on_generate_click)
+        self.generate_btn.pack(fill="x", pady=(0, 15))
         
         # Status Label büyütüldü (11 -> 12)
         self.status_label = tk.Label(content, text="Status: Ready", font=("Helvetica", 12, "bold italic"), bg="#0A0A0A", fg="#B3B3B3")
@@ -399,11 +383,8 @@ class MainPage(tk.Frame):
         self.songs_container = tk.Frame(self.list_card, bg="#181818")
         self.songs_container.pack(fill="both", expand=True)
             
-        # --- Custom Rounded Save Button ---
-        self.save_btn = RoundedButton(content, text="SAVE ALBUM (JSON + PNG)", 
-                                      command=self.on_save_click,
-                                      width=450, height=50, radius=25,
-                                      font=("Helvetica", 14, "bold"))
+        # Fix REQ 2 (Use Native ttk.Button)
+        self.save_btn = ttk.Button(content, text="SAVE ALBUM (JSON + PNG)", style="Green.TButton", command=self.on_save_click)
         self.save_btn.pack(side="bottom", pady=(20,0))
 
     # --- SCREEN TRANSITION FUNCTIONS ---
@@ -426,7 +407,7 @@ class MainPage(tk.Frame):
         journal = self.mood_text.get("1.0", "end-1c")
         genre = self.genre_combo.get()
         era = self.era_combo.get()
-        track_count = self.track_val.get()
+        track_count = int(self.track_spin.get())
         
         if self.view_model:
             self.view_model.generate_album(journal, genre, era, track_count)
@@ -477,16 +458,9 @@ class MainPage(tk.Frame):
             tk.Label(row, text=track['title'], width=40, anchor="w", bg="#181818", fg="#FFFFFF", font=("Helvetica", 14, "bold")).pack(side="left")
             tk.Label(row, text=track['artist'], anchor="w", bg="#181818", fg="#B3B3B3", font=("Helvetica", 12)).pack(side="left")
 
-            # REQ 7: Custom Bordered "LISTEN" Button (Ensures visible border on all platforms)
-            # REQ 7: Custom Rounded LISTEN Button (Outline -> Solid)
-            listen_btn = RoundedButton(
-                row, 
-                text="LISTEN", 
-                command=lambda u=track.get('url', ''): self.view_model.play_track(u) if self.view_model else None,
-                width=100, height=34, radius=17, # radius=height/2 makes it a pill
-                outline_mode=True,
-                font=("Helvetica", 9, "bold")
-            )
+            # Fix REQ 2 (Use Native ttk.Button)
+            listen_btn = ttk.Button(row, text="LISTEN", style="Outline.TButton", 
+                                   command=lambda u=track.get('url', ''): self.view_model.play_track(u) if self.view_model else None)
             listen_btn.pack(side="right", padx=10)
 
             # UX Improvement: 1px bottom border for the row
