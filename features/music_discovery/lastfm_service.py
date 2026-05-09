@@ -13,6 +13,7 @@ class LastFmService:
             raise ValueError("Last.fm API Key bulunamadı! .env dosyasını kontrol edin.")
 
     def fetch_tracks_by_tags(self, tags, target_count):
+        print(f"\n--- [LOG] Last.fm Search ---\nTags: {tags}\nTarget Count: {target_count}\n----------------------------\n")
         
         all_tracks = []
         seen_track_ids = set() # To prevent duplicate tracks.
