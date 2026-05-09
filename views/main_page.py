@@ -60,6 +60,11 @@ class MainPage(tk.Frame):
                              arrowcolor="#FFFFFF",
                              padding=5)
         
+        self.style.map("TCombobox", 
+                       fieldbackground=[('readonly', '#181818')],
+                       selectbackground=[('readonly', '#181818')],
+                       selectforeground=[('readonly', '#FFFFFF')])
+        
         self.style.configure("TSpinbox", 
                              fieldbackground="#181818", 
                              background="#282828", 
@@ -70,6 +75,11 @@ class MainPage(tk.Frame):
                              insertcolor="#FFFFFF",
                              arrowcolor="#FFFFFF",
                              padding=5)
+        
+        self.style.map("TSpinbox", 
+                       fieldbackground=[('readonly', '#181818')],
+                       selectbackground=[('readonly', '#181818')],
+                       selectforeground=[('readonly', '#FFFFFF')])
 
     def create_layout(self):
         # Left Panel
@@ -110,17 +120,17 @@ class MainPage(tk.Frame):
         self.mood_text.insert("1.0", "How was your day?")
         
         ttk.Label(content, text="Genre", style="Left.TLabel").pack(anchor="w")
-        self.genre_combo = ttk.Combobox(content, values=["Electronic", "Synthwave", "Indie", "Pop", "Rock"])
-        self.genre_combo.set("Electronic")
+        self.genre_combo = ttk.Combobox(content, values=["Pop", "Rock", "Hip-Hop / Rap", "Electronic", "Indie", "R&B / Soul", "Jazz", "Metal", "Türk Pop", "Klasik"], state="readonly")
+        self.genre_combo.set("Pop")
         self.genre_combo.pack(fill="x", pady=(0, 15))
         
         ttk.Label(content, text="Era", style="Left.TLabel").pack(anchor="w")
-        self.era_combo = ttk.Combobox(content, values=["Modern", "2010s", "2000s", "90s", "80s"])
-        self.era_combo.set("Modern")
+        self.era_combo = ttk.Combobox(content, values=["2020s", "2010s", "2000s", "1990s", "1980s", "1970s"], state="readonly")
+        self.era_combo.set("2020s")
         self.era_combo.pack(fill="x", pady=(0, 15))
         
         ttk.Label(content, text="Track Count (6-14)", style="Left.TLabel").pack(anchor="w")
-        self.track_spin = ttk.Spinbox(content, from_=6, to=14)
+        self.track_spin = ttk.Spinbox(content, from_=6, to=14, state="readonly")
         self.track_spin.set(10)
         self.track_spin.pack(fill="x", pady=(0, 30))
         
