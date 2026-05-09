@@ -13,18 +13,13 @@ class ImageService:
         self.base_url = "https://image.pollinations.ai/prompt/"
 
     def fetch_cover_image(self, prompt, genre_style=""):
-        """
-        Gemini'dan gelen cover prompt'unu alır, seçilen türün görsel stiliyle birleştirir
-        ve Pollinations.ai üzerinden albüm kapağını indirir.
-        
-        REQUIREMENT 6: The cover prompt returned by Gemini must be combined with 
-        the chosen genre's visual style description and forwarded to an AI image generation service.
-        """
         # REQ 6: Prompt ile tür stilini birleştiriyoruz
         if genre_style:
             full_prompt = f"{prompt}, in the style of {genre_style} album art"
         else:
             full_prompt = prompt
+        
+        print(f"\n--- [LOG] Pollinations Prompt ---\n{full_prompt}\n---------------------------------\n")
         
         # URL içinde boşluk ve özel karakterleri güvenli hale getiriyoruz
         encoded_prompt = quote(full_prompt)

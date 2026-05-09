@@ -41,6 +41,8 @@ Input Parameters:
 - Track Count: {track_count}
 """
 
+        print(f"\n--- [LOG] Gemini Prompt ---\n{prompt}\n---------------------------\n")
+
         try:
             # Generate content using the new SDK
             response = self.client.models.generate_content(
