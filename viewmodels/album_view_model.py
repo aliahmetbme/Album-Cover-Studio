@@ -2,6 +2,8 @@ import threading
 from features.generator.gemini_service import GeminiService
 from features.music_discovery.lastfm_service import LastFmService
 from features.media_export.image_service import ImageService
+from features.playback.playback_service import PlaybackService
+
 
 class AlbumViewModel:
     def __init__(self):
@@ -12,6 +14,8 @@ class AlbumViewModel:
         self.gemini_service = GeminiService()
         self.lastfm_service = LastFmService()
         self.image_service = ImageService()
+        self.playback_service = PlaybackService()
+
         
         # Callback properties to communicate with the View
         self.on_status_update = None
@@ -73,3 +77,10 @@ class AlbumViewModel:
         except Exception as e:
             if self.on_error:
                 self.on_error(str(e))
+
+    def play_track(self, url: str):
+        """
+        REQ 7: Route playback request to the PlaybackService.
+        """
+        return self.playback_service.open_track(url)
+
