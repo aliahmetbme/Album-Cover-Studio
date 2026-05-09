@@ -3,6 +3,7 @@ from features.generator.gemini_service import GeminiService
 from features.music_discovery.lastfm_service import LastFmService
 from features.media_export.image_service import ImageService
 from features.playback.playback_service import PlaybackService
+from features.media_export.save_manager import SaveManager
 
 
 class AlbumViewModel:
@@ -15,6 +16,7 @@ class AlbumViewModel:
         self.lastfm_service = LastFmService()
         self.image_service = ImageService()
         self.playback_service = PlaybackService()
+        self.save_manager = SaveManager()
 
         
         # Callback properties to communicate with the View
@@ -83,4 +85,31 @@ class AlbumViewModel:
         REQ 7: Route playback request to the PlaybackService.
         """
         return self.playback_service.open_track(url)
+
+    def save_album(self, album_data: dict):
+            """
+            REQ 8: Routes the save request to SaveManager.
+            Fixes 'Image is not JSON serializable' error by separating image from metadata.
+            """
+            if not album_data:
+                return False, "No album data to save."
+
+            folder = self.save_manager.select_directory()
+            if not folder:
+                return False, "Save cancelled by user."
+
+            metadata_to_save = album_data.copy()
+            cover_image = metadata_to_save.pop("cover_image", None) 
+            tracks = metadata_to_save.get("tracks", [])
+            success = self.save_manager.save_album_package(
+                folder, 
+                metadata_to_save, 
+                tracks, 
+                cover_image 
+            )
+            
+            if success:
+                return True, "Album saved successfully!"
+            else:
+                return False, "Failed to save the album."
 
