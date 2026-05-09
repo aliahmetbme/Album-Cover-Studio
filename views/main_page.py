@@ -35,51 +35,60 @@ class MainPage(tk.Frame):
 
     def configure_styles(self):
         self.style.configure("TFrame", background="#121212")
-        self.style.configure("Left.TFrame", background="#0A0A0A") # Darker side panel
-        self.style.configure("Card.TFrame", background="#181818") # For card-style containers
+        self.style.configure("Left.TFrame", background="#0A0A0A")
+        self.style.configure("Card.TFrame", background="#181818")
         
-        self.style.configure("TLabel", background="#121212", foreground="#FFFFFF", font=("Helvetica", 12))
+        self.style.configure("TLabel", background="#121212", foreground="#FFFFFF", font=("Helvetica", 10))
+        # SOL PANEL ETİKETLERİ BÜYÜTÜLDÜ (10 -> 12)
         self.style.configure("Left.TLabel", background="#0A0A0A", foreground="#FFFFFF", font=("Helvetica", 12))
         
-        # Button Style (Spotify Green)
-        self.style.configure("Green.TButton", background="#1DB954", foreground="#000000", font=("Helvetica", 13, "bold"), padding=12)
+        # ANA BUTON BÜYÜTÜLDÜ (11 -> 14 ve padding artırıldı)
+        self.style.configure("Green.TButton", background="#1DB954", foreground="#000000", font=("Helvetica", 14, "bold"), padding=14)
         self.style.map("Green.TButton", background=[('active', '#1ed760')])
         
-        # Secondary Button (Listen / Save)
-        self.style.configure("Outline.TButton", background="#181818", foreground="#1DB954", font=("Helvetica", 11, "bold"))
-
-        # Combobox & Spinbox Styling (Modern Dark Border)
+        self.style.configure("Outline.TButton", background="#181818", foreground="#1DB954", font=("Helvetica", 9, "bold"))
+        
+        # --- DEFINITIVE FIX FOR COMBOBOX ---
         self.style.configure("TCombobox", 
                              fieldbackground="#181818", 
-                             background="#282828", 
-                             foreground="#FFFFFF",
-                             darkcolor="#282828",
-                             lightcolor="#282828",
-                             bordercolor="#3E3E3E",
-                             insertcolor="#FFFFFF",
+                             background="#181818", 
+                             foreground="#FFFFFF", 
+                             bordercolor="#0A0A0A", 
+                             lightcolor="#0A0A0A",
+                             darkcolor="#0A0A0A", 
                              arrowcolor="#FFFFFF",
-                             padding=5)
-        
+                             borderwidth=0,
+                             padding=12) # Increased padding for height
+                             
         self.style.map("TCombobox", 
                        fieldbackground=[('readonly', '#181818')],
-                       selectbackground=[('readonly', '#181818')],
-                       selectforeground=[('readonly', '#FFFFFF')])
-        
+                       selectbackground=[('readonly', '#1DB954')],
+                       selectforeground=[('readonly', '#000000')],
+                       background=[('active', '#282828')])
+                       
+        self.option_add('*TCombobox*Listbox.background', '#181818')
+        self.option_add('*TCombobox*Listbox.foreground', '#FFFFFF')
+        self.option_add('*TCombobox*Listbox.selectBackground', '#1DB954')
+        self.option_add('*TCombobox*Listbox.selectForeground', '#000000')
+        self.option_add('*TCombobox*Listbox.font', 'Helvetica 13') # AÇILIR MENÜ YAZILARI BÜYÜTÜLDÜ
+
+        # --- DEFINITIVE FIX FOR SPINBOX ---
         self.style.configure("TSpinbox", 
                              fieldbackground="#181818", 
-                             background="#282828", 
-                             foreground="#FFFFFF",
-                             darkcolor="#282828",
-                             lightcolor="#282828",
-                             bordercolor="#3E3E3E",
-                             insertcolor="#FFFFFF",
+                             background="#181818", 
+                             foreground="#FFFFFF", 
+                             bordercolor="#0A0A0A", 
+                             lightcolor="#0A0A0A", 
+                             darkcolor="#0A0A0A", 
                              arrowcolor="#FFFFFF",
-                             padding=5)
-        
+                             borderwidth=0,
+                             padding=12) # Increased padding for height
+                             
         self.style.map("TSpinbox", 
                        fieldbackground=[('readonly', '#181818')],
-                       selectbackground=[('readonly', '#181818')],
-                       selectforeground=[('readonly', '#FFFFFF')])
+                       selectbackground=[('readonly', '#1DB954')],
+                       selectforeground=[('readonly', '#000000')],
+                       background=[('active', '#282828')])
 
     def create_layout(self):
         # Left Panel
@@ -108,41 +117,48 @@ class MainPage(tk.Frame):
 
     def build_left_panel(self):
         # Container for padding
-        content = tk.Frame(self.left_panel, bg="#0A0A0A", padx=25, pady=30)
+        content = tk.Frame(self.left_panel, bg="#0A0A0A", padx=30, pady=40)
         content.pack(fill="both", expand=True)
 
-        tk.Label(content, text="Album Cover Studio", font=("Helvetica", 22, "bold"), bg="#0A0A0A", fg="#FFFFFF").pack(anchor="w", pady=(0, 5))
-        tk.Label(content, text="Journal your mood, generate your sound.", font=("Helvetica", 11), bg="#0A0A0A", fg="#B3B3B3").pack(anchor="w", pady=(0, 20))
+        # Başlık ve Alt başlık büyütüldü
+        tk.Label(content, text="Album Cover Studio", font=("Helvetica", 26, "bold"), bg="#0A0A0A", fg="#FFFFFF").pack(anchor="w", pady=(0, 5))
+        tk.Label(content, text="Journal your mood, generate your sound.", font=("Helvetica", 13), bg="#0A0A0A", fg="#B3B3B3").pack(anchor="w", pady=(0, 25))
         
+        # Disclaimer yazısı - wraplength güvenli sınıra (280) çekildi
+        tk.Label(content, text="Note: Generated data is fictional; tracks are real. AI limitations apply.", 
+                 font=("Helvetica", 11, "bold italic"), bg="#0A0A0A", fg="#B3B3B3", 
+                 wraplength=280, justify="left").pack(anchor="w", pady=(0, 15))
+
         ttk.Label(content, text="Your Mood / Journal Entry", style="Left.TLabel").pack(anchor="w", pady=(10, 5))
-        self.mood_text = tk.Text(content, height=6, bg="#181818", fg="#FFFFFF", font=("Helvetica", 11), insertbackground="white", relief="flat", highlightthickness=2, highlightbackground="#3E3E3E", highlightcolor="#1DB954", padx=10, pady=10)
-        self.mood_text.pack(fill="x", pady=(0, 15))
+        
+        # Metin alanı fontu büyütüldü (11 -> 13)
+        self.mood_text = tk.Text(content, height=6, bg="#181818", fg="#FFFFFF", font=("Helvetica", 13), 
+                                 insertbackground="white", relief="flat", highlightthickness=0, bd=0, 
+                                 padx=12, pady=12)
+        self.mood_text.pack(fill="x", pady=(0, 20))
         self.mood_text.insert("1.0", "How was your day?")
         
-        ttk.Label(content, text="Genre", style="Left.TLabel").pack(anchor="w")
-        self.genre_combo = ttk.Combobox(content, values=["Pop", "Rock", "Hip-Hop / Rap", "Electronic", "Indie", "R&B / Soul", "Jazz", "Metal", "Türk Pop", "Klasik"], state="readonly")
+        ttk.Label(content, text="Genre", style="Left.TLabel").pack(anchor="w", pady=(0, 5))
+        self.genre_combo = ttk.Combobox(content, values=["Pop", "Rock", "Hip-Hop / Rap", "Electronic", "Indie", "R&B / Soul", "Jazz", "Metal", "Türk Pop", "Klasik"], state="readonly", font=("Helvetica", 13))
         self.genre_combo.set("Pop")
-        self.genre_combo.pack(fill="x", pady=(0, 15))
+        self.genre_combo.pack(fill="x", pady=(0, 20))
         
-        ttk.Label(content, text="Era", style="Left.TLabel").pack(anchor="w")
-        self.era_combo = ttk.Combobox(content, values=["2020s", "2010s", "2000s", "1990s", "1980s", "1970s"], state="readonly")
+        ttk.Label(content, text="Era", style="Left.TLabel").pack(anchor="w", pady=(0, 5))
+        self.era_combo = ttk.Combobox(content, values=["2020s", "2010s", "2000s", "1990s", "1980s", "1970s"], state="readonly", font=("Helvetica", 13))
         self.era_combo.set("2020s")
-        self.era_combo.pack(fill="x", pady=(0, 15))
+        self.era_combo.pack(fill="x", pady=(0, 20))
         
-        ttk.Label(content, text="Track Count (6-14)", style="Left.TLabel").pack(anchor="w")
-        self.track_spin = ttk.Spinbox(content, from_=6, to=14, state="readonly")
+        ttk.Label(content, text="Track Count (6-14)", style="Left.TLabel").pack(anchor="w", pady=(0, 5))
+        self.track_spin = ttk.Spinbox(content, from_=6, to=14, state="readonly", font=("Helvetica", 13))
         self.track_spin.set(10)
-        self.track_spin.pack(fill="x", pady=(0, 30))
+        self.track_spin.pack(fill="x", pady=(0, 35))
         
         self.generate_btn = ttk.Button(content, text="GENERATE ALBUM", style="Green.TButton", command=self.on_generate_click)
-        self.generate_btn.pack(fill="x", pady=(0, 10))
+        self.generate_btn.pack(fill="x", pady=(0, 15))
         
-        self.status_label = tk.Label(content, text="Status: Ready", font=("Helvetica", 11, "italic"), bg="#0A0A0A", fg="#B3B3B3")
+        # Status Label büyütüldü (11 -> 12)
+        self.status_label = tk.Label(content, text="Status: Ready", font=("Helvetica", 12, "bold italic"), bg="#0A0A0A", fg="#B3B3B3")
         self.status_label.pack(side="left", anchor="sw", pady=10)
-
-        # AI Disclaimer Note at the bottom of left panel
-        tk.Label(content, text="⚠️ Note: Generated data is fictional; tracks are real. AI limitations apply.", 
-                 font=("Helvetica", 10), bg="#0A0A0A", fg="#666666", wraplength=280, justify="left").pack(side="bottom", anchor="w", pady=(20, 0))
 
     def build_empty_state(self):
         """Welcome screen shown when the app first opens"""
@@ -198,7 +214,7 @@ class MainPage(tk.Frame):
         self.tags_label.pack(anchor="w")
         
         # Bottom Section: Tracklist (Inside a card)
-        self.list_card = tk.Frame(content, bg="#181818", padx=20, pady=20, highlightthickness=1, highlightbackground="#3E3E3E")
+        self.list_card = tk.Frame(content, bg="#181818", padx=20, pady=20, highlightthickness=1, highlightbackground="#282828", highlightcolor="#282828")
         self.list_card.pack(fill="both", expand=True)
         
         self.list_header = tk.Label(self.list_card, text="#      Title                                                          Artist", font=("Helvetica", 11, "bold"), bg="#181818", fg="#B3B3B3")
@@ -273,6 +289,33 @@ class MainPage(tk.Frame):
             tk.Label(row, text=str(i), width=4, anchor="w", bg="#181818", fg="#B3B3B3", font=("Helvetica", 12)).pack(side="left")
             tk.Label(row, text=track['title'], width=40, anchor="w", bg="#181818", fg="#FFFFFF", font=("Helvetica", 14, "bold")).pack(side="left")
             tk.Label(row, text=track['artist'], anchor="w", bg="#181818", fg="#B3B3B3", font=("Helvetica", 12)).pack(side="left")
+
+            # REQ 7: Custom Bordered "LISTEN" Button (Ensures visible border on all platforms)
+            listen_btn = tk.Label(
+                row, 
+                text="LISTEN", 
+                bg="#181818", 
+                fg="#1DB954", 
+                font=("Helvetica", 9, "bold"),
+                padx=20, 
+                pady=6,
+                highlightthickness=1,
+                highlightbackground="#1DB954",
+                cursor="hand2"
+            )
+            
+            # Hover Effects
+            listen_btn.bind("<Enter>", lambda e, lb=listen_btn: lb.config(bg="#1DB954", fg="#FFFFFF"))
+            listen_btn.bind("<Leave>", lambda e, lb=listen_btn: lb.config(bg="#181818", fg="#1DB954"))
+            
+            # Click Action
+            listen_btn.bind("<Button-1>", lambda e, u=track.get('url', ''): self.view_model.play_track(u) if self.view_model else None)
+            
+            listen_btn.pack(side="right", padx=10)
+
+            # UX Improvement: 1px bottom border for the row
+            separator = tk.Frame(self.songs_container, bg="#282828", height=1)
+            separator.pack(fill="x", pady=(5, 5))
 
 if __name__ == "__main__":
     # Support for standalone execution
