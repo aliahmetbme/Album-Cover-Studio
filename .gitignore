@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+
+# API Keys & Secrets
+.env
+config.py
+
+# Data
+*.json
+*.png
+
+
+.env
+__pycache__/
+*.pyc
