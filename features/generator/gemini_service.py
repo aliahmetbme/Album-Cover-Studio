@@ -22,23 +22,35 @@ class GeminiService:
         REQ 4: Gemini creates the album metadata based on user inputs.
         Returns a dictionary containing album details and Last.fm tags.
         """
-        prompt = f"""Based on this journal entry and parameters, return ONLY valid JSON
-with this schema:
+        prompt = f"""
+Act as a creative Music Director and Concept Artist. Your goal is to transform a personal journal entry into a cohesive fictional album concept.
+
+Current User Inputs:
+- Journal Entry: "{journal_text}"
+- Music Genre: {genre}
+- Target Era: {era}
+- Expected Track Count: {track_count}
+
+Instructions for the JSON fields:
+1. "album_name" & "artist_name": Must be fictional and creatively reflect the mood of the journal.
+2. "mood_description": A short sentence explaining how the "{genre}" genre and "{era}" era evoke the emotions in the journal.
+3. "cover_prompt": MUST BE IN ENGLISH. Provide a highly detailed, artistic description for an AI image generator (Pollinations.ai). Describe lighting, textures, and style (e.g., "{genre} album art style"). DO NOT include text or artist names.
+4. "lastfm_tags": Provide 4-6 lowercase tags. To ensure Last.fm API returns real songs:
+   - Always include the English version of the genre (e.g., if genre is "Türk Pop", use "turkish pop").
+   - Do NOT use special Turkish characters (use 'o' instead of 'ö', 's' instead of 'ş').
+   - Include the era (e.g., "{era}").
+   - Add broad emotion tags (e.g., "happy", "love", "melancholic").
+
+Return ONLY valid JSON with this schema:
 {{
  "album_name": "string",
  "artist_name": "string",
- "year": "string",
+ "year": "{era[:4]}",
  "label": "string",
  "mood_description": "string",
  "cover_prompt": "string",
- "lastfm_tags": ["array of 4-6 lowercase Last.fm tag strings"]
+ "lastfm_tags": ["tag1", "tag2", "tag3", "tag4"]
 }}
-
-Input Parameters:
-- Journal: "{journal_text}"
-- Genre: {genre}
-- Era: {era}
-- Track Count: {track_count}
 """
 
         print(f"\n--- [LOG] Gemini Prompt ---\n{prompt}\n---------------------------\n")
