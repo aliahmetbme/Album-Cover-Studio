@@ -40,6 +40,7 @@ class AlbumViewModel:
             # 1. Gemini Phase
             if self.on_status_update:
                 self.on_status_update("Gemini is thinking...")
+                print("Generating album metadata...")
             
             album_metadata = self.gemini_service.generate_album_metadata(
                 journal, genre, era, track_count
@@ -51,6 +52,7 @@ class AlbumViewModel:
             # 2. Last.fm Phase
             if self.on_status_update:
                 self.on_status_update("Fetching tracks...")
+                print("Fetching tracks...")
             
             tags = album_metadata.get("lastfm_tags", [])
             tracks = self.lastfm_service.fetch_tracks_by_tags(tags, track_count)
@@ -63,6 +65,7 @@ class AlbumViewModel:
             # 3. Image Generation Phase (Pollinations)
             if self.on_status_update:
                 self.on_status_update("Generating cover...")
+                print("Generating cover...")
             
             cover_prompt = album_metadata.get("cover_prompt", "")
             cover_image = self.image_service.fetch_cover_image(cover_prompt, genre)
@@ -75,6 +78,7 @@ class AlbumViewModel:
             # Final Success Callback
             if self.on_generation_success:
                 self.on_generation_success(album_metadata)
+                print("Album generated successfully!")
 
         except Exception as e:
             if self.on_error:

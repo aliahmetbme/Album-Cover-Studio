@@ -136,10 +136,9 @@ class MainPage(tk.Frame):
         self.style.configure("Card.TFrame", background="#181818")
         
         self.style.configure("TLabel", background="#121212", foreground="#FFFFFF", font=("Helvetica", 10))
-        # SOL PANEL ETİKETLERİ BÜYÜTÜLDÜ (10 -> 12)
+
         self.style.configure("Left.TLabel", background="#0A0A0A", foreground="#FFFFFF", font=("Helvetica", 12))
         
-        # ANA BUTON BÜYÜTÜLDÜ (11 -> 14 ve padding artırıldı)
         self.style.configure("Green.TButton", 
                              background="#1DB954", 
                              foreground="#000000", 
@@ -157,7 +156,6 @@ class MainPage(tk.Frame):
         
         self.style.configure("Outline.TButton", background="#181818", foreground="#1DB954", font=("Helvetica", 9, "bold"))
         
-        # --- DEFINITIVE FIX FOR COMBOBOX ---
         self.style.configure("TCombobox", 
                              fieldbackground="#181818", 
                              background="#181818", 
@@ -180,9 +178,8 @@ class MainPage(tk.Frame):
         self.option_add('*TCombobox*Listbox.foreground', '#FFFFFF')
         self.option_add('*TCombobox*Listbox.selectBackground', '#1DB954')
         self.option_add('*TCombobox*Listbox.selectForeground', '#000000')
-        self.option_add('*TCombobox*Listbox.font', 'Helvetica 13') # AÇILIR MENÜ YAZILARI BÜYÜTÜLDÜ
+        self.option_add('*TCombobox*Listbox.font', 'Helvetica 13') 
 
-        # --- DEFINITIVE FIX FOR SPINBOX ---
         self.style.configure("TSpinbox", 
                              fieldbackground="#181818", 
                              background="#181818", 
@@ -272,30 +269,32 @@ class MainPage(tk.Frame):
 
         ttk.Label(content, text="Your Mood / Journal Entry", style="Left.TLabel").pack(anchor="w", pady=(10, 5))
         
-        # Mood Text Area (Native tk.Text with internal padding)
+        # AGP 1 - Mood Text Area (Native tk.Text with internal padding)
         self.mood_text = tk.Text(content, bg="#181818", fg="#FFFFFF", font=("Helvetica", 13), 
                                  insertbackground="white", relief="flat", highlightthickness=1, 
                                  highlightbackground="#282828", bd=0, padx=12, pady=12, height=6)
         self.mood_text.pack(fill="x", pady=(0, 20))
         self.mood_text.insert("1.0", "How was your day?")
-        
+
+        # AGP 2 - Genre Dropdown        
         ttk.Label(content, text="Genre", style="Left.TLabel").pack(anchor="w", pady=(0, 5))
         self.genre_combo = ttk.Combobox(content, values=["Pop", "Rock", "Hip-Hop / Rap", "Electronic", "Indie", "R&B / Soul", "Jazz", "Metal", "Turkish Pop", "Classical"], state="readonly", font=("Helvetica", 13))
         self.genre_combo.set("Pop")
         self.genre_combo.pack(fill="x", pady=(0, 20))
         
+        # AGP 3 - Era Dropdown
         ttk.Label(content, text="Era", style="Left.TLabel").pack(anchor="w", pady=(0, 5))
         self.era_combo = ttk.Combobox(content, values=["1970s", "1980s", "1990s", "2000s", "2010s", "2020s"], state="readonly", font=("Helvetica", 13))
         self.era_combo.set("2020s")
         self.era_combo.pack(fill="x", pady=(0, 20))
         
-        # Fix AGP4 (Track Count Spinbox)
+        # AGP 4 - Track Count Spinbox
         ttk.Label(content, text="Track Count (6-14)", style="Left.TLabel").pack(anchor="w", pady=(0, 5))
         self.track_spin = ttk.Spinbox(content, from_=6, to=14, state="readonly", font=("Helvetica", 13))
         self.track_spin.set(10)
         self.track_spin.pack(fill="x", pady=(0, 35))
-        
-        # Fix REQ 2 (Use Native ttk.Button)
+          
+        # REQ 2 (Use Native ttk.Button)
         self.generate_btn = ttk.Button(content, text="GENERATE ALBUM", style="Green.TButton", command=self.on_generate_click)
         self.generate_btn.pack(fill="x", pady=(0, 15))
         
@@ -452,18 +451,14 @@ class MainPage(tk.Frame):
             row = tk.Frame(self.songs_container, bg="#181818", padx=15, pady=10)
             row.pack(fill="x")
             
-            # Row hover effects removed - Focus only on LISTEN button hover
-
             tk.Label(row, text=str(i), width=3, anchor="w", bg="#181818", fg="#B3B3B3", font=("Helvetica", 12)).pack(side="left")
             tk.Label(row, text=track['title'], width=40, anchor="w", bg="#181818", fg="#FFFFFF", font=("Helvetica", 14, "bold")).pack(side="left")
             tk.Label(row, text=track['artist'], anchor="w", bg="#181818", fg="#B3B3B3", font=("Helvetica", 12)).pack(side="left")
 
-            # Fix REQ 2 (Use Native ttk.Button)
             listen_btn = ttk.Button(row, text="LISTEN", style="Outline.TButton", 
                                    command=lambda u=track.get('url', ''): self.view_model.play_track(u) if self.view_model else None)
             listen_btn.pack(side="right", padx=10)
 
-            # UX Improvement: 1px bottom border for the row
             separator = tk.Frame(self.songs_container, bg="#282828", height=1)
             separator.pack(fill="x", pady=(5, 5))
 

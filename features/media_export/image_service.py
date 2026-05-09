@@ -5,15 +5,12 @@ from urllib.parse import quote
 
 class ImageService:
     def __init__(self):
-        """
-        Pollinations.ai için servis sınıfı.
-        Herhangi bir API anahtarı gerektirmez, sadece URL üzerinden görsel oluşturur.
-        """
-        # Pollinations.ai için temel URL (Resim bytes verisi almak için image.pollinations.ai kullanılmalı)
+        
+        # Pollinations.ai URL (Image bytes data using image.pollinations.ai)
         self.base_url = "https://image.pollinations.ai/prompt/"
 
     def fetch_cover_image(self, prompt, genre_style=""):
-        # REQ 6: Prompt ile tür stilini birleştiriyoruz
+        # Combine prompt with genre style
         if genre_style:
             full_prompt = f"{prompt}, in the style of {genre_style} album art"
         else:
@@ -24,25 +21,25 @@ class ImageService:
         # URL içinde boşluk ve özel karakterleri güvenli hale getiriyoruz
         encoded_prompt = quote(full_prompt)
         
-        # Genişlik ve yükseklik ayarlarını yapıyoruz (Spotify stili için 600x600 tercih edildi)
-        # nologo=true parametresi ile Pollinations logosunu kaldırıyoruz.
+        # Width and height settings (600x600 preferred for Spotify style)
+        # Pollinations logo is removed with nologo=true parameter.
         image_url = f"{self.base_url}{encoded_prompt}?width=600&height=600&seed=42&nologo=true"
 
         try:
-            print(f"Resim oluşturuluyor: {image_url}")
+            print(f"Image is being generated: {image_url}")
             
             # REQ 9: Uzun süren işlemler için timeout ekliyoruz.
             # (Bu metodun kendisi threading.Thread içinde çağrılmalıdır)
             response = requests.get(image_url, timeout=90)
             response.raise_for_status()
 
-            # İndirilen binary veriyi bir resim nesnesine (PIL Image) dönüştür
+            # Downloaded binary data into an image object (PIL Image)
             img_data = BytesIO(response.content)
-            img = Image.open(img_data).convert("RGB")
-            return img
+            img = Image.open(img_data).convert("RGB") 
+            return img 
             
         except Exception as e:
-            print(f"Resim indirme hatası: {e}")
+            print(f"Image download error: {e}")
             return None
 
 # --- GÖRSEL UZMANI İÇİN TEST BÖLÜMÜ ---
