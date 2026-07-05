@@ -96,7 +96,7 @@ Launch the Tkinter GUI by running the main entry point of the application:
 python main.py
 ```
 
-## 🏗️ Project Architecture (MVVM)
+## Project Architecture (MVVM)
 
 The project strictly follows the **Model-View-ViewModel (MVVM)** design pattern to separate the Tkinter GUI from the business logic:
 
@@ -114,17 +114,6 @@ The project strictly follows the **Model-View-ViewModel (MVVM)** design pattern 
 
 * `save_manager.py`: Split-save serialization handling JSON and PNG exports securely.
 
-## 👥 The Team
-
-* **Ali Ahmet Erdoğdu** - System Architecture, Multi-service API Integration, Concurrent Process Management
-
-* **Salih Dalaklı** - Frontend Architecture, Core GUI Layout, Theme Engineering
-
-* **Burak Güleryüz** - Input Validation, Dynamic UI Components, Interactive Elements
-
-* **Baran Deniz Aydın** - Media Export, Data Serialization, Ethical UI Compliance
-
-* **Arda Abacı** - Image Synthesis Integration, Data Conversion, UX Feedback
 
 ## 📄 Academic Integrity & License
 
